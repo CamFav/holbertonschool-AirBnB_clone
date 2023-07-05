@@ -9,8 +9,8 @@ class BaseModel:
     def __init__(self):
         """Constructor"""
         self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime.now()
-        self.updated_at = datetime.datetime.now()
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
     def __str__(self):
         """String representation"""
@@ -18,12 +18,12 @@ class BaseModel:
 
     def save(self):
         """Update with current time"""
-        self.updated_at = datetime.datetime.now()
+        self.updated_at = datetime.now()
 
     def to_dict(self):
         """Return dict representation"""
         dict = self.__dict__.copy()
-        dict['__class__'] = type(self).__name__
+        dict['__class__'] = self.__class__.__name__
         dict['created_at'] = self.created_at.isoformat()
         dict['updated_at'] = self.updated_at.isoformat()
         return dict
