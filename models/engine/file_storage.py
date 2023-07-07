@@ -14,7 +14,7 @@ class FileStorage:
         Returns:
             Dictionary __objects
         """
-        return self.__objects.__dict__
+        return FileStorage.__objects
 
     def new(self, obj):
         """New
@@ -22,18 +22,24 @@ class FileStorage:
         Args:
             obj (key): id
         """
-        self.__objects = obj.__class__.__name__
+        key = obj.__class__.__name__ + '.' + obj.id
+        FileStorage.__objects[key] = obj
 
     def save(self):
-        serialiazed_data = json.dumps(self.__objects)
-
-        with open(self.__file_path, 'w') as file:
-            file.write(serialiazed_data)
+        obj_to_dict = FileStorage.__objects.copy()
+        for key, value in obj_to_dict.items():
+            obj_to_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, "w", encoding="utf-8") as file:
+            json.dump(obj_to_dict, file)
 
     def reload(self):
-        if self.__file_path:
-            with open(self.__file_path, 'r') as file:
-                data = json.load(file)
-            return data
-        else:
-            return None
+        try:
+            with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
+                data = json.loads(file.read())
+                for k in data.keys():
+                    v = data[k]
+                    FileStorage.__objects[k] = eval(v['__class__'])(**v)
+
+                return FileStorage.__objects
+        except:
+            return {}
