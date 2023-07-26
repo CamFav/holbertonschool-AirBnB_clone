@@ -83,4 +83,5 @@ $
 
 ## [Contributors](AUTHORS)
 Camille Favriel (camillefvrl@gmail.com)
-Mickael Mangin
+
+Mickael Mangin (mickael.mangin@live.fr)
