@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json
+from models.base_model import BaseModel
 """File Storage"""
 
 
@@ -33,13 +34,10 @@ class FileStorage:
             json.dump(obj_to_dict, file)
 
     def reload(self):
-        try:
-            with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
-                data = json.loads(file.read())
-                for k in data.keys():
-                    v = data[k]
-                    FileStorage.__objects[k] = eval(v['__class__'])(**v)
+        with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
+            data = json.loads(file.read())
+            for k in data.keys():
+                v = data[k]
+                FileStorage.__objects[k] = eval(v['__class__'])(**v)
 
-                return FileStorage.__objects
-        except:
-            return {}
+            return FileStorage.__objects
