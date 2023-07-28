@@ -36,6 +36,8 @@ class BaseModel:
         """Return dict representation"""
         dict = self.__dict__.copy()
         dict['__class__'] = type(self).__name__
-        dict['created_at'] = self.created_at.isoformat()
-        dict['updated_at'] = self.updated_at.isoformat()
-        return dict
+        if not isinstance(dict['created_at'], str):
+            dict['created_at'] = self.created_at.isoformat()
+        if not isinstance(dict['updated_at'], str):
+            dict['updated_at'] = self.updated_at.isoformat()
+        return (dict)
