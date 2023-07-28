@@ -28,7 +28,7 @@ class FileStorage:
         FileStorage.__objects[key] = obj
 
     def save(self):
-        obj_to_dict = {FileStorage.__objects.copy()}
+        obj_to_dict = FileStorage.__objects.copy()
         for key, value in obj_to_dict.items():
             obj_to_dict[key] = value.to_dict()
         with open(FileStorage.__file_path, "w", encoding="utf-8") as file:
