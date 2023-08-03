@@ -3,7 +3,9 @@ import cmd
 import sys
 from datetime import datetime
 import json
-
+from models.base_model import BaseModel
+from models.user import User
+from models.engine.file_storage import FileStorage as fs
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
@@ -26,22 +28,43 @@ class HBNBCommand(cmd.Cmd):
             return
 
         try:
-            # Create an instance of the specified class
-            # Save it to the JSON file
-            # Print the instance id
-            # Handle missing or non-existing class name
+            myClass = "{}()".format(line.split(" ")[0])
+
+            model = eval(myClass)
+            model.save()
+            print(model.id)
+
         except Exception as e:
-            print("** " + str(e))
+            print("** class doesn't exist **")
 
     def do_show(self, line):
+        # Handle missing or non-existing class name, id, or instance
         if not line:
             print("** class name missing **")
             return
 
+        args = line.spit()
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name = args[0]
+        instance_id = args[1]
+
         try:
             # Show the string representation of an instance
             # based on class name and id
-            # Handle missing or non-existing class name, id, or instance
+            cls = eval(class_name)
+            instance = fs.get(cls, instance_id)
+
+            if instance is None:
+                print("** no instance found **")
+                return
+
+            print(instance)
+        except NameError:
+            print("** class doesn't exist **")
         except Exception as e:
             print("** " + str(e))
 
@@ -51,6 +74,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         try:
+            print("Yo")
             # Destroy an instance based on class name and id
             # Save the change into the JSON file
             # Handle missing or non-existing class name, id, or instance
@@ -61,7 +85,16 @@ class HBNBCommand(cmd.Cmd):
         # Print string representation of all instances
         # based on the class name, or all instances
         # Handle missing or non-existing class name
-        pass
+        try:
+            myClass = line.split(" ")[0]
+            allItems = fs.all(myClass)
+            
+            for key, value in allItems.items():
+                print(value)
+
+        except Exception as e:
+            print(e)
+            print("** class doesn't exist **")
 
     def do_update(self, line):
         if not line:

@@ -27,6 +27,7 @@ class BaseModel:
         myStr = "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
         return myStr
 
+
     def save(self):
         """Update with current time"""
         import models
