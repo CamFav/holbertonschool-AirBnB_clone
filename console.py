@@ -49,7 +49,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        args = line.spit()
+        args = line.split()
 
         if len(args) < 2:
             print("** instance id missing **")
@@ -62,30 +62,44 @@ class HBNBCommand(cmd.Cmd):
             # Show the string representation of an instance
             # based on class name and id
             cls = eval(class_name)
-            instance = fs.get(cls, instance_id)
-
-            if instance is None:
+            instances = fs().all()
+            key = "{}.{}".format(cls.__name__, instance_id)
+            if key in instances:
+                instance = instances[key]
+                print(instance)
+            else:
                 print("** no instance found **")
-                return
 
-            print(instance)
         except NameError:
             print("** class doesn't exist **")
-        except Exception as e:
-            print("** " + str(e))
 
     def do_destroy(self, line):
         if not line:
             print("** class name missing **")
             return
 
+        args = line.split()
+
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name = args[0]
+        instance_id = args[1]
+
         try:
-            print("Yo")
-            # Destroy an instance based on class name and id
-            # Save the change into the JSON file
-            # Handle missing or non-existing class name, id, or instance
-        except Exception as e:
-            print("** " + str(e))
+            cls = eval(class_name)
+            instances = fs().all()
+            key = "{}.{}".format(cls.__name__, instance_id)
+
+            if key in instances:
+                instances.pop(key)
+                fs().save()
+            else:
+                print("** no instance found **")
+
+        except NameError:
+            print("** class doesn't exist **")
 
     def do_all(self, line):
         # Print string representation of all instances
