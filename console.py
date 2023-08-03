@@ -1,19 +1,99 @@
+#!/usr/bin/env python3
 import cmd
+import sys
+from datetime import datetime
+import json
+
+class BaseModel:
+    def __init__(self, *args, **kwargs):
+        self.id = str(uuid.uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+
+    def __str__(self):
+        return "[BaseModel] ({}) {}".format(self.id, self.__dict__)
+
+    def save(self):
+        self.updated_at = datetime.now()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
 
 class HBNBCommand(cmd.Cmd):
-    prompt = "(hbnb) "
+    prompt = '(hbnb) '
 
     def do_quit(self, arg):
-        """Exit the program"""
+        """Quit command to exit the program"""
         return True
 
     def do_EOF(self, arg):
-        """Exit the program using Ctrl+D (EOF)"""
+        """Exit the program using CTRL+D"""
+        print()  # Print a newline before exiting
         return True
 
     def emptyline(self):
-        """Do nothing on empty line"""
         pass
 
-if __name__ == "__main__":
+    def do_create(self, line):
+        if not line:
+            print("** class name missing **")
+            return
+
+        try:
+            # Create an instance of the specified class
+            # Save it to the JSON file
+            # Print the instance id
+            # Handle missing or non-existing class name
+        except Exception as e:
+            print("** " + str(e))
+
+    def do_show(self, line):
+        if not line:
+            print("** class name missing **")
+            return
+
+        try:
+            # Show the string representation of an instance
+            # based on class name and id
+            # Handle missing or non-existing class name, id, or instance
+        except Exception as e:
+            print("** " + str(e))
+
+    def do_destroy(self, line):
+        if not line:
+            print("** class name missing **")
+            return
+
+        try:
+            # Destroy an instance based on class name and id
+            # Save the change into the JSON file
+            # Handle missing or non-existing class name, id, or instance
+        except Exception as e:
+            print("** " + str(e))
+
+    def do_all(self, line):
+        # Print string representation of all instances
+        # based on the class name, or all instances
+        # Handle missing or non-existing class name
+        pass
+
+    def do_update(self, line):
+        if not line:
+            print("** class name missing **")
+            return
+
+        try:
+            # Update an instance based on class name and id
+            # by adding or updating an attribute
+            # Save the change into the JSON file
+            # Handle missing or non-existing class name, id, attribute name, or instance
+            pass
+        except Exception as e:
+            print("** " + str(e))
+
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
