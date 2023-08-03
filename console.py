@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""modules for HBNBCommand"""
 import cmd
 import sys
 from datetime import datetime
@@ -6,11 +7,12 @@ import json
 from models.base_model import BaseModel
 from models.user import User
 from models.engine.file_storage import FileStorage as fs
-"""Modules for HBNBCommand"""
+
+"""HBNB Console"""
 
 
 class HBNBCommand(cmd.Cmd):
-    """Console"""
+    """Class to handle the custom project"""
     prompt = '(hbnb) '
 
     def do_quit(self, arg):
@@ -23,6 +25,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def emptyline(self):
+        """Do nothing when an empty line is entered"""
         pass
 
     def do_create(self, line):
