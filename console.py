@@ -167,8 +167,6 @@ class HBNBCommand(cmd.Cmd):
 
             if key in instances:
                 instance = instances[key]
-
-                
                 setattr(instance, attribute_name, attribute_value)
                 print(instance)
                 instance.save()
