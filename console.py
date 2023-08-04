@@ -45,11 +45,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         # Handle missing or non-existing class name, id, or instance
+        args = line.split()
+
         if not line:
             print("** class name missing **")
             return
-
-        args = line.split()
 
         if len(args) < 2:
             print("** instance id missing **")
@@ -69,6 +69,7 @@ class HBNBCommand(cmd.Cmd):
                 print(instance)
             else:
                 print("** no instance found **")
+                return
 
         except NameError:
             print("** class doesn't exist **")
