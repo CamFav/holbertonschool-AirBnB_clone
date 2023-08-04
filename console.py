@@ -106,9 +106,21 @@ class HBNBCommand(cmd.Cmd):
         # based on the class name, or all instances
         # Handle missing or non-existing class name
         try:
-            myClass = line.split(" ")[0]
-            allItems = fs.all(myClass)
-            
+            args = line.split()
+            if len(args) == 0:
+                allItems = fs.all("")
+            elif len(args) == 1:
+                class_name = args[0]
+                try:
+                    class_obj = eval(class_name)
+                    allItems = fs.all(class_name)
+                except NameError:
+                    print("** class doesn't exist **")
+                    return
+            else:
+                print("** class doesn't exist **")
+                return
+
             for key, value in allItems.items():
                 print(value)
 
@@ -117,18 +129,50 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_update(self, line):
-        if not line:
+        args = line.split()
+
+        if not args:
             print("** class name missing **")
             return
 
+        class_name = args[0]
+        if len(args) < 2:
+            print("** instance id missing **")
+            return
+
+        instance_id = args[1]
+
+        if len(args) < 3:
+            print("** attribute name missing **")
+            return
+
+        attribute_name = args[2]
+
+        if len(args) < 4:
+            print("** value missing **")
+            return
+
+        attribute_value = args[3]
+
         try:
-            # Update an instance based on class name and id
-            # by adding or updating an attribute
-            # Save the change into the JSON file
-            # Handle missing or non-existing class name, id, attribute name, or instance
-            pass
-        except Exception as e:
-            print("** " + str(e))
+            cls = eval(class_name)
+            instances = fs().all()
+            key = "{}.{}".format(cls.__name__, instance_id)
+
+            if key in instances:
+                instance = instances[key]
+                if hasattr(instance, attribute_name):
+                    attr_type = type(getattr(instance, attribute_name))
+                    setattr(instance, attribute_name, attr_type(attribute_value))
+                    instance.save()
+                else:
+                    print("** attribute doesn't exist **")
+            else:
+                print("** no instance found **")
+
+        except NameError:
+            print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
