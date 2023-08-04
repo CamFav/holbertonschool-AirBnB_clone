@@ -35,15 +35,21 @@ class FileStorage:
             json.dump(obj_to_dict, file)
 
     def reload(self):
-        classes = {
-            'BaseModel': BaseModel
-        }
-        if os.path.isfile(self.__file_path):
-            with open(self.__file_path, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                for key, value in data.items():
-                    class_name = value['__class__']
-                    if class_name in classes:
-                        cls = classes[class_name]
-                        obj = cls(**value)
-                        self.__objects[key] = obj
+        """ Désérialise le fichier JSON pour créer des instances d'objets. """
+        from models.base_model import BaseModel
+        from models.city import City
+        from models.state import State
+        from models.place import Place
+        from models.review import Review
+        from models.user import User
+        from models.amenity import Amenity
+        try:
+            with open(FileStorage.__file_path, "r", encoding='utf-8') as file:
+                data = json.loads(file.read())
+                for k in data.keys():
+                    v = data[k]
+                    FileStorage.__objects[k] = eval(v['__class__'])(**v)
+
+                return FileStorage.__objects
+        except:
+            return {}
